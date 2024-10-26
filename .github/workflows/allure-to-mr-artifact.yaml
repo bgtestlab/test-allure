@@ -38,6 +38,9 @@ jobs:
     outputs:
       output-url: ${{ steps.artifact-upload-step.outputs.artifact-url }}
     steps:
+    - name: check files
+      run: ls -al .
+    
     - name: artifact upload
       uses: actions/upload-artifact@v4
       with:
