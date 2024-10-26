@@ -12,11 +12,12 @@ jobs:
   build:
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v4
+    - name: checkout
+      uses: actions/checkout@v4
+      
     - name: Build the Docker image
       continue-on-error: true
-      run: |
-        docker-compose -f ./docker-compose.yaml up
+      run: docker-compose -f ./docker-compose.yaml up
 
     - name: Extract test results
       run: |
