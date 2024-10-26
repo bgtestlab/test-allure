@@ -61,11 +61,12 @@ jobs:
       - name: Update Comment
         env:
           JOB_PATH: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}"
-          ARTIFACT_URL: "$OUTPUT-URL"
+          ARTIFACT-URL: ${{  needs.test.outputs.output-url  }}
           HEAD_SHA: "${{ github.event.pull_request.head.sha }}"
         uses: peter-evans/create-or-update-comment@v3
         with:
-          issue-number: ${{ needs.test.outputs.comment-id }}
+          issue-number: ${{ github.event.pull_request.number }}
+          comment-id: ${{  needs.test.outputs.comment-id  }}
           edit-mode: replace
           body: |-
             ![badge]
@@ -76,4 +77,4 @@ jobs:
             | -------- | ----------------------- |
             | Commit   | ${{ env.HEAD_SHA }}     |
             | Logs     | ${{ env.JOB_PATH }}     |
-            | Download | ${{ env.OUTPUT-URL }}   |
+            | Download | ${{ env.ARTIFACT-URL }} |
