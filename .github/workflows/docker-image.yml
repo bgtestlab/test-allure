@@ -16,13 +16,13 @@ jobs:
     - name: Build the Docker image
       continue-on-error: true
       run: |
-        docker build . --file Dockerfile --tag test-allure:latest
-        docker run test-allure:latest
+        docker build . --file Dockerfile --tag test-allure
+        docker run test-allure
 
     - name: Extract test results
       run: |
         mkdir out
-        docker cp test-allure:latest:/app/allure-report/index.html ./out/
+        docker cp test-allure:/app/allure-report/index.html ./out/
       if: always()
 
     - name: Deploy to GitHub Pages
