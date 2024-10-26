@@ -17,7 +17,7 @@ jobs:
       
     - name: Build the Docker image
       continue-on-error: true
-      run: docker-compose -f ./docker-compose.yaml up
+      run: docker compose -f ./docker-compose.yaml up
 
     - name: Extract test results
       run: |
