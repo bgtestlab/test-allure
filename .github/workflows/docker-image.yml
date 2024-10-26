@@ -33,7 +33,6 @@ jobs:
     #     publish_dir: ./out
 
     - name: github page
-      uses: JamesIves/github-pages-deploy-action@master
-      env:
-        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        FOLDER: out
+      uses: JamesIves/github-pages-deploy-action@v4
+      with:
+        folder: out
