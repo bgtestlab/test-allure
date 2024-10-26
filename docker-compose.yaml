@@ -1,0 +1,10 @@
+version: "3"
+services:
+  test-runner:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: test-allure
+    command:
+      - pytest
+    tty: true
