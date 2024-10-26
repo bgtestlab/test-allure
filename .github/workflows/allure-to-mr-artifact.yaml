@@ -31,15 +31,66 @@ jobs:
         ls -al ./out
       if: always()
 
-    - name: Pull request artifacts
-      uses: gavv/pull-request-artifacts@v2
+  upload:
+    runs-on: ubuntu-latest
+    needs: test
+    outputs:
+      output-url: ${{ steps.artifact-upload-step.outputs.artifact-url }}
+    steps:
+    - name: artifact upload
+      uses: actions/upload-artifact@v4
       with:
-        # Commit hash that triggered PR
-        commit: ${{ github.event.pull_request.head.sha }}
+        path: out/index.html
+        if-no-files-found: error
+        retention-days: 3
+  
+  attach:
+    runs-on: ubuntu-latest
+    needs: upload
+    steps:
+      - env:
+          OUTPUT-URL: ${{needs.job1.outputs.output-url}}
+          PR_NUMBER: ${{ github.event.number }}
+        run: echo "Artifact URL from previous job is $OUTPUT-URL"       
 
-        # Token for current repo (used to post PR comment)
-        repo-token: ${{ secrets.GITHUB_TOKEN }}
+      - name: Find Comment
+        uses: peter-evans/find-comment@v2
+        id: find-comment
+        with:
+          issue-number: ${{ env.PR_NUMBER }}
+          comment-author: 'github-actions[bot]'
+          
+      - name: Update Comment
+      - env:
+          JOB_PATH: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ env.PREVIOUS_JOB_ID }}"
+          ARTIFACT_URL: "$OUTPUT-URL"
+          HEAD_SHA: "${{ github.event.pull_request.head.sha }}"
+        uses: peter-evans/create-or-update-comment@v3
+        with:
+          issue-number: ${{ env.PR_NUMBER }}
+          comment-id: ${{ steps.find-comment.outputs.comment-id }}
+          edit-mode: replace
+          body: |-
+            ![badge]
+            
+            Build Successful! You can find a link to the downloadable artifact below.
+            
+            | Name     | Link                    |
+            | -------- | ----------------------- |
+            | Commit   | ${{ env.HEAD_SHA }}     |
+            | Logs     | ${{ env.JOB_PATH }}     |
+            | Download | ${{ env.OUTPUT-URL }} |
+        
 
-        # Whitespace-separated list of files to upload
-        artifacts: |
-          out/index.html
+    # - name: Pull request artifacts
+    #   uses: gavv/pull-request-artifacts@v2
+    #   with:
+    #     # Commit hash that triggered PR
+    #     commit: ${{ github.event.pull_request.head.sha }}
+
+    #     # Token for current repo (used to post PR comment)
+    #     repo-token: ${{ secrets.GITHUB_TOKEN }}
+
+    #     # Whitespace-separated list of files to upload
+    #     artifacts: |
+    #       out/index.html
