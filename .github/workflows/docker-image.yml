@@ -11,10 +11,10 @@ jobs:
 
   build:
     runs-on: ubuntu-latest
-    continue-on-error: true
     steps:
     - uses: actions/checkout@v4
     - name: Build the Docker image
+      continue-on-error: true
       run: |
         docker build . --file Dockerfile --tag test-allure:latest
         docker run test-allure:latest
