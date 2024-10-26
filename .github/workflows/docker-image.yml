@@ -22,11 +22,12 @@ jobs:
     - name: Extract test results
       run: |
         mkdir out
-        docker cp test-allure:/app/allure-report/index.html ./out/
+        docker cp test-allure:/app/allure-report/index.html ./out/index.html
+        ls -al ./out
       if: always()
 
     - name: Deploy to GitHub Pages
       uses: peaceiris/actions-gh-pages@v4
       with: 
         personal_token: ${{ secrets.ACCESS_TOKEN }}
-        publish_dir: out
+        publish_dir: ./out
