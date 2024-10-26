@@ -18,5 +18,9 @@ jobs:
       run: |
         docker build . --file Dockerfile --tag test-allure:latest
         docker run test-allure:latest
+
+    - name: Extract test results
+      run: |
         ls -al .
         ls -al ./allure-reports/
+      if: always()
