@@ -1,9 +1,10 @@
 FROM bitnami/python:3.11-debian-11
 
 WORKDIR /app
+COPY . /app
 
 RUN apt-get update
-RUN apt-get install --fix-missing
+# RUN apt-get install --fix-missing
 RUN apt-get install -y ca-certificates-java
 RUN apt-get install -y openjdk-11-jre-headless
 
@@ -13,3 +14,5 @@ ENV PATH="/allure/bin:${PATH}"
 ENV ALLURE_CONFIG="/allure-config/allure.properties"
 RUN ls -al /
 RUN allure --version
+RUN pip install -r requirements.txt
+CMD ["pytest"]
