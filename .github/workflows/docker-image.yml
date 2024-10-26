@@ -26,8 +26,14 @@ jobs:
         ls -al ./out
       if: always()
 
-    - name: Deploy to GitHub Pages
-      uses: peaceiris/actions-gh-pages@v4
-      with: 
-        personal_token: ${{ secrets.ACCESS_TOKEN }}
-        publish_dir: ./out
+    # - name: Deploy to GitHub Pages
+    #   uses: peaceiris/actions-gh-pages@v4
+    #   with: 
+    #     personal_token: ${{ secrets.ACCESS_TOKEN }}
+    #     publish_dir: ./out
+
+    - name: github page
+      uses: JamesIves/github-pages-deploy-action@master
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        FOLDER: out
