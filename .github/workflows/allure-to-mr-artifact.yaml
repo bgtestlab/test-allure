@@ -3,6 +3,7 @@ name: Attach allure-report to PR
 on:
   pull_request:
     branches: ["main"]
+  workflow_dispatch:
     
 jobs:
 
@@ -61,7 +62,7 @@ jobs:
           comment-author: 'github-actions[bot]'
           
       - name: Update Comment
-      - env:
+        env:
           JOB_PATH: "${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ env.PREVIOUS_JOB_ID }}"
           ARTIFACT_URL: "$OUTPUT-URL"
           HEAD_SHA: "${{ github.event.pull_request.head.sha }}"
