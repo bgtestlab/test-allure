@@ -18,6 +18,6 @@ jobs:
     - name: Build the Docker image
       run: |
         docker build . --file Dockerfile --tag test-allure:latest
+        docker run test-allure:latest
         ls -al .
         ls -al ./allure-reports/
-      
