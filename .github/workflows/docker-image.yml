@@ -16,8 +16,7 @@ jobs:
     - name: Build the Docker image
       continue-on-error: true
       run: |
-        docker build . --file Dockerfile --tag test-allure
-        docker run test-allure
+        docker-compose -f ./docker-compose.yaml up
 
     - name: Extract test results
       run: |
